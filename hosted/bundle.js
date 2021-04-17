@@ -1,5 +1,6 @@
 "use strict";
 
+// const e = require("express");
 var handleDomo = function handleDomo(e) {
   e.preventDefault();
   $("#domoMessage").animate({
@@ -7,7 +8,7 @@ var handleDomo = function handleDomo(e) {
   }, 350);
 
   if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
-    handleError("RAWR! All fields are required");
+    handleError("RAWR! Name and age fields are required");
     return false;
   }
 
@@ -39,6 +40,13 @@ var DomoForm = function DomoForm(props) {
       type: "text",
       name: "age",
       placeholder: "Domo Age"
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "item"
+    }, "Item: "), /*#__PURE__*/React.createElement("input", {
+      id: "domoItem",
+      type: "text",
+      name: "item",
+      placeholder: "Domo Item"
     }), /*#__PURE__*/React.createElement("input", {
       type: "hidden",
       name: "_csrf",
@@ -62,6 +70,14 @@ var DomoList = function DomoList(props) {
   }
 
   var domoNodes = props.domos.map(function (domo) {
+    var domoItem = /*#__PURE__*/React.createElement("div", null);
+
+    if (domo.item) {
+      domoItem = /*#__PURE__*/React.createElement("h3", {
+        className: "domoItem"
+      }, " Item: ", domo.item);
+    }
+
     return (/*#__PURE__*/React.createElement("div", {
         key: domo._id,
         className: "domo"
@@ -73,7 +89,7 @@ var DomoList = function DomoList(props) {
         className: "domoName"
       }, " Name: ", domo.name, " "), /*#__PURE__*/React.createElement("h3", {
         className: "domoAge"
-      }, " Age: ", domo.age, " "))
+      }, " Age: ", domo.age, " "), domoItem)
     );
   });
   return (/*#__PURE__*/React.createElement("div", {
