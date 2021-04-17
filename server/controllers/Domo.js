@@ -59,12 +59,12 @@ const makeDomo = (req, res) => {
 };
 
 const deleteDomo = (req, res) => {
-  if(!req.body.domoId) {
+  if (!req.body.domoId) {
     return res.status(400).json({ error: 'RAWR! Domo ID not found.' });
   }
 
-  Domo.DomoModel.deleteDomo(req.body.domoId, res.json({ redirect: '/maker' }));
-}
+  return DomoModel.deleteDomo(req.body.domoId, res.json({ redirect: '/maker' }));
+};
 
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;

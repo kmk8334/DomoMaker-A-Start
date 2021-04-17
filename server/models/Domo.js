@@ -63,7 +63,7 @@ DomoSchema.statics.deleteDomo = (domoId, callback) => {
   };
 
   return DomoModel.deleteOne(search).exec(callback);
-}
+};
 
 DomoModel = mongoose.model('Domo', DomoSchema);
 
