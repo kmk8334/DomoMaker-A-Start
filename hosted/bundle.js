@@ -18,6 +18,23 @@ var handleDomo = function handleDomo(e) {
   return false;
 };
 
+var handleDeleteDomo = function handleDeleteDomo(e) {
+  e.preventDefault();
+  $("#domoMessage").animate({
+    width: 'hide'
+  }, 350);
+
+  if (e.target.querySelector("#domoId").value == '') {
+    handleError("RAWR! Domo ID not found.");
+    return false;
+  }
+
+  sendAjax('POST', $(e.target).attr("action"), $(e.target).serialize(), function () {
+    loadDomosFromServer();
+  });
+  return false;
+};
+
 var DomoForm = function DomoForm(props) {
   return (/*#__PURE__*/React.createElement("form", {
       id: "domoForm",
@@ -78,6 +95,7 @@ var DomoList = function DomoList(props) {
       }, " Item: ", domo.item);
     }
 
+    var csrfToken = $("#domoForm input[name='_csrf']")[0].value;
     return (/*#__PURE__*/React.createElement("div", {
         key: domo._id,
         className: "domo"
@@ -87,7 +105,26 @@ var DomoList = function DomoList(props) {
         className: "domoFace"
       }), /*#__PURE__*/React.createElement("h3", {
         className: "domoName"
-      }, " Name: ", domo.name, " "), /*#__PURE__*/React.createElement("h3", {
+      }, " Name: ", domo.name, " "), /*#__PURE__*/React.createElement("form", {
+        onSubmit: handleDeleteDomo,
+        name: "deleteDomoForm",
+        action: "/deleteDomo",
+        method: "POST",
+        className: "deleteDomoForm"
+      }, /*#__PURE__*/React.createElement("input", {
+        id: "domoId",
+        name: "domoId",
+        type: "hidden",
+        value: domo._id
+      }), /*#__PURE__*/React.createElement("input", {
+        type: "hidden",
+        name: "_csrf",
+        value: csrfToken
+      }), /*#__PURE__*/React.createElement("input", {
+        className: "deleteDomoSubmit",
+        type: "submit",
+        value: "X"
+      })), /*#__PURE__*/React.createElement("h3", {
         className: "domoAge"
       }, " Age: ", domo.age, " "), domoItem)
     );

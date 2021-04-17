@@ -17,6 +17,23 @@ const handleDomo = (e) => {
     return false;
 };
 
+const handleDeleteDomo = (e) => {
+    e.preventDefault();
+
+    $("#domoMessage").animate({width:'hide'},350);
+
+    if(e.target.querySelector("#domoId").value == '') {
+        handleError("RAWR! Domo ID not found.");
+        return false;
+    }
+
+    sendAjax('POST', $(e.target).attr("action"), $(e.target).serialize(), function() {
+        loadDomosFromServer();
+    });
+
+    return false;
+}
+
 const DomoForm = (props) => {
     return (
     <form id="domoForm"
@@ -52,10 +69,21 @@ const DomoList = function(props) {
         if(domo.item) {
             domoItem = <h3 className="domoItem"> Item: {domo.item}</h3>;
         }
+        let csrfToken = $("#domoForm input[name='_csrf']")[0].value;
         return (
             <div key={domo._id} className="domo">
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
                 <h3 className="domoName"> Name: {domo.name} </h3>
+                <form onSubmit={handleDeleteDomo}
+                    name="deleteDomoForm"
+                    action="/deleteDomo"
+                    method="POST"
+                    className="deleteDomoForm"
+                    >
+                    <input id="domoId" name="domoId" type="hidden" value={domo._id} />
+                    <input type="hidden" name="_csrf" value={csrfToken} />
+                    <input className="deleteDomoSubmit" type="submit" value="X" />
+                </form>
                 <h3 className="domoAge"> Age: {domo.age} </h3>
                 {domoItem}
             </div>

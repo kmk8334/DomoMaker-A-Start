@@ -1,4 +1,5 @@
 const models = require('../models');
+const { DomoModel } = require('../models/Domo');
 
 const { Domo } = models;
 
@@ -57,6 +58,15 @@ const makeDomo = (req, res) => {
   return domoPromise;
 };
 
+const deleteDomo = (req, res) => {
+  if(!req.body.domoId) {
+    return res.status(400).json({ error: 'RAWR! Domo ID not found.' });
+  }
+
+  Domo.DomoModel.deleteDomo(req.body.domoId, res.json({ redirect: '/maker' }));
+}
+
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;
+module.exports.deleteDomo = deleteDomo;
 module.exports.make = makeDomo;
